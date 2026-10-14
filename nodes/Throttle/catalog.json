@@ -1,0 +1,1907 @@
+{
+	"generatedFrom": "@core/action-catalog",
+	"resources": [
+		{
+			"value": "analytics",
+			"name": "Analytics"
+		},
+		{
+			"value": "cart",
+			"name": "Cart"
+		},
+		{
+			"value": "checkout",
+			"name": "Checkout"
+		},
+		{
+			"value": "customer",
+			"name": "Customer"
+		},
+		{
+			"value": "discount",
+			"name": "Discount"
+		},
+		{
+			"value": "event",
+			"name": "Event"
+		},
+		{
+			"value": "extension",
+			"name": "Extension"
+		},
+		{
+			"value": "invoice",
+			"name": "Invoice"
+		},
+		{
+			"value": "order",
+			"name": "Order"
+		},
+		{
+			"value": "payment",
+			"name": "Payment"
+		},
+		{
+			"value": "quote",
+			"name": "Quote"
+		},
+		{
+			"value": "subscription",
+			"name": "Subscription"
+		},
+		{
+			"value": "webhookDelivery",
+			"name": "Webhook Delivery"
+		},
+		{
+			"value": "workspace",
+			"name": "Workspace"
+		}
+	],
+	"operations": [
+		{
+			"actionId": "whoami",
+			"resource": "workspace",
+			"operation": "getConnection",
+			"name": "Get Connection",
+			"description": "Report which workspace, application and environment this credential is pinned to, and what it is allowed to do. Call this first when you need to know whether you are talking to production or a sandbox.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": [],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/whoami"
+				}
+			],
+			"paginated": false,
+			"fields": []
+		},
+		{
+			"actionId": "search_orders",
+			"resource": "order",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List orders, newest first, with optional free-text and status filters.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing.",
+				"Over an OAuth connection, q matches the order id, order number and status fields only."
+			],
+			"scopes": ["orders:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/orders"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "q",
+					"type": "string",
+					"required": false,
+					"description": "Free-text search.",
+					"displayName": "Search Query"
+				},
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Order status filter.",
+					"displayName": "Status"
+				},
+				{
+					"name": "paymentStatus",
+					"type": "string",
+					"required": false,
+					"description": "Payment status filter.",
+					"displayName": "Payment Status"
+				},
+				{
+					"name": "createdAfter",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 lower bound on creation time, exclusive. For a single day, pass that day's midnight and the next day's midnight.",
+					"displayName": "Created After"
+				},
+				{
+					"name": "createdBefore",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 upper bound on creation time, exclusive.",
+					"displayName": "Created Before"
+				}
+			]
+		},
+		{
+			"actionId": "search_customers",
+			"resource": "customer",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "Find customers by name, email or external id, or list them by creation date. Over an OAuth connection (ChatGPT, Claude) text search is not available — list by date instead — because every field it could match is withheld there.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"email, phone, firstName, lastName, name and metadata are withheld (null, or absent from the result) unless the credential holds customer_pii:read, which OAuth connections cannot hold. Over an OAuth connection company, externalId and externalCustomerId are withheld too, and q is refused. Do not describe a missing name/email as \"no name on file\"; say it is withheld."
+			],
+			"scopes": ["customers:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/customers"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "q",
+					"type": "string",
+					"required": false,
+					"description": "Free-text search.",
+					"displayName": "Search Query"
+				},
+				{
+					"name": "createdAfter",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 lower bound on creation time, exclusive. For a single day, pass that day's midnight and the next day's midnight.",
+					"displayName": "Created After"
+				},
+				{
+					"name": "createdBefore",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 upper bound on creation time, exclusive.",
+					"displayName": "Created Before"
+				}
+			]
+		},
+		{
+			"actionId": "list_subscriptions",
+			"resource": "subscription",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List subscriptions with optional customer and status filters.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["subscriptions:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/subscriptions"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "customerId",
+					"type": "string",
+					"required": false,
+					"description": "Filter by customer.",
+					"displayName": "Customer ID"
+				},
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by status.",
+					"displayName": "Status"
+				},
+				{
+					"name": "createdAfter",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 lower bound on creation time, exclusive. For a single day, pass that day's midnight and the next day's midnight.",
+					"displayName": "Created After"
+				},
+				{
+					"name": "createdBefore",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 upper bound on creation time, exclusive.",
+					"displayName": "Created Before"
+				}
+			]
+		},
+		{
+			"actionId": "get_subscription",
+			"resource": "subscription",
+			"operation": "get",
+			"name": "Get",
+			"description": "Read a single subscription including its current period and pending changes.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["subscriptions:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/subscriptions/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Subscription id.",
+					"displayName": "Subscription ID"
+				}
+			]
+		},
+		{
+			"actionId": "search_quotes",
+			"resource": "quote",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List quotes with optional status filter — useful for \"which quotes expire soon\".",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["quotes:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/quotes"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by quote status.",
+					"displayName": "Status"
+				},
+				{
+					"name": "createdAfter",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 lower bound on creation time, exclusive. For a single day, pass that day's midnight and the next day's midnight.",
+					"displayName": "Created After"
+				},
+				{
+					"name": "createdBefore",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 upper bound on creation time, exclusive.",
+					"displayName": "Created Before"
+				}
+			]
+		},
+		{
+			"actionId": "get_quote",
+			"resource": "quote",
+			"operation": "get",
+			"name": "Get",
+			"description": "Read a single quote: status, totals, and each revision with its line items and payment terms.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
+			],
+			"scopes": ["quotes:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/quotes/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Quote id.",
+					"displayName": "Quote ID"
+				}
+			]
+		},
+		{
+			"actionId": "list_invoices",
+			"resource": "invoice",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List issued invoices with optional status filter.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
+			],
+			"scopes": ["invoices:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/invoices"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by invoice status.",
+					"displayName": "Status"
+				}
+			]
+		},
+		{
+			"actionId": "receivables_aging",
+			"resource": "invoice",
+			"operation": "getAging",
+			"name": "Get Receivables Aging",
+			"description": "Outstanding receivables bucketed by age — answers \"what is overdue and by how long\".",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["invoices:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/invoices/aging"
+				}
+			],
+			"paginated": false,
+			"fields": []
+		},
+		{
+			"actionId": "search_discounts",
+			"resource": "discount",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List discount codes with optional filters — type, active state, and creation date range.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["discounts:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/discounts"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "q",
+					"type": "string",
+					"required": false,
+					"description": "Free-text search.",
+					"displayName": "Search Query"
+				},
+				{
+					"name": "code",
+					"type": "string",
+					"required": false,
+					"description": "Exact code match.",
+					"displayName": "Code"
+				},
+				{
+					"name": "type",
+					"type": "string",
+					"required": false,
+					"description": "Filter by discount type.",
+					"enum": ["percentage", "fixed_amount"],
+					"displayName": "Type"
+				},
+				{
+					"name": "isActive",
+					"type": "boolean",
+					"required": false,
+					"description": "Filter by active state.",
+					"displayName": "Is Active"
+				},
+				{
+					"name": "createdAfter",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 date lower bound.",
+					"displayName": "Created After"
+				},
+				{
+					"name": "createdBefore",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 date upper bound.",
+					"displayName": "Created Before"
+				}
+			]
+		},
+		{
+			"actionId": "get_discount",
+			"resource": "discount",
+			"operation": "get",
+			"name": "Get",
+			"description": "Read a single discount code: value, conditions, usage limits and redemption count.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["discounts:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/discounts/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Discount id.",
+					"displayName": "Discount ID"
+				}
+			]
+		},
+		{
+			"actionId": "search_payments",
+			"resource": "payment",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "List payments with optional filters — method, status, order, amount range, or a Net-N overdue bucket. Today payments are only reachable nested inside get_order; this is the standalone entry point.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["payments:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/payments"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "method",
+					"type": "string",
+					"required": false,
+					"description": "Filter by payment method.",
+					"displayName": "Method"
+				},
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by payment status.",
+					"displayName": "Status"
+				},
+				{
+					"name": "orderId",
+					"type": "string",
+					"required": false,
+					"description": "Filter to one order.",
+					"displayName": "Order ID"
+				},
+				{
+					"name": "aging",
+					"type": "string",
+					"required": false,
+					"description": "Overdue bucket filter, Net-N payments only.",
+					"enum": ["0_30", "31_60", "61_90", "90_plus"],
+					"displayName": "Aging"
+				},
+				{
+					"name": "dueFrom",
+					"type": "string",
+					"required": false,
+					"description": "Due-date range start, YYYY-MM-DD.",
+					"displayName": "Due From"
+				},
+				{
+					"name": "dueTo",
+					"type": "string",
+					"required": false,
+					"description": "Due-date range end, YYYY-MM-DD.",
+					"displayName": "Due To"
+				},
+				{
+					"name": "amountMin",
+					"type": "number",
+					"required": false,
+					"description": "Minimum amount, minor units.",
+					"displayName": "Amount Min"
+				},
+				{
+					"name": "amountMax",
+					"type": "number",
+					"required": false,
+					"description": "Maximum amount, minor units.",
+					"displayName": "Amount Max"
+				}
+			]
+		},
+		{
+			"actionId": "get_invoice",
+			"resource": "invoice",
+			"operation": "get",
+			"name": "Get",
+			"description": "Read a single issued invoice: line items, totals, status and the billing snapshot at issue time.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
+			],
+			"scopes": ["invoices:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/invoices/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Invoice id.",
+					"displayName": "Invoice ID"
+				}
+			]
+		},
+		{
+			"actionId": "list_abandoned_carts",
+			"resource": "cart",
+			"operation": "getAbandoned",
+			"name": "Get Many Abandoned",
+			"description": "Carts that were started but never finalized, with recovery status — the abandoned-cart recovery list.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Report the summary as unavailable rather than failing the whole call if that sub-read errors."
+			],
+			"scopes": ["carts:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/abandoned-carts"
+				},
+				{
+					"method": "GET",
+					"path": "/api/v1/abandoned-carts/summary"
+				}
+			],
+			"paginated": true,
+			"fields": []
+		},
+		{
+			"actionId": "search_events",
+			"resource": "event",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "Search the immutable event log by type or entity. The first stop when asking what actually happened to an order, cart or subscription.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["events:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/events"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "type",
+					"type": "string",
+					"required": false,
+					"description": "Event type, e.g. order.created.",
+					"displayName": "Type"
+				},
+				{
+					"name": "entityType",
+					"type": "string",
+					"required": false,
+					"description": "Entity type filter.",
+					"displayName": "Entity Type"
+				},
+				{
+					"name": "entityId",
+					"type": "string",
+					"required": false,
+					"description": "Entity id filter.",
+					"displayName": "Entity ID"
+				}
+			]
+		},
+		{
+			"actionId": "list_webhook_deliveries",
+			"resource": "webhookDelivery",
+			"operation": "getAll",
+			"name": "Get Many",
+			"description": "Recent outbound webhook deliveries, filterable by endpoint, status and event type.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["webhook_deliveries:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/webhook-deliveries"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "endpointId",
+					"type": "string",
+					"required": false,
+					"description": "Filter by endpoint.",
+					"displayName": "Endpoint ID"
+				},
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by delivery status: pending, delivered, failed or dead_letter.",
+					"displayName": "Status"
+				},
+				{
+					"name": "eventType",
+					"type": "string",
+					"required": false,
+					"description": "Filter by exact event type, e.g. payment.failed.",
+					"displayName": "Event Type"
+				},
+				{
+					"name": "limit",
+					"type": "number",
+					"required": false,
+					"description": "Page size.",
+					"displayName": "Limit"
+				}
+			]
+		},
+		{
+			"actionId": "get_webhook_delivery",
+			"resource": "webhookDelivery",
+			"operation": "get",
+			"name": "Get",
+			"description": "Full delivery record: the signed payload we sent, the response we got back, and every attempt.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["webhook_deliveries:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/webhook-deliveries/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Delivery id.",
+					"displayName": "Webhook Delivery ID"
+				}
+			]
+		},
+		{
+			"actionId": "list_extension_installations",
+			"resource": "extension",
+			"operation": "getAll",
+			"name": "Get Many Installations",
+			"description": "Extensions installed on this application, with status and configuration.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["extensions:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/installations"
+				}
+			],
+			"paginated": true,
+			"fields": [
+				{
+					"name": "status",
+					"type": "string",
+					"required": false,
+					"description": "Filter by installation status.",
+					"enum": ["active", "suspended", "uninstalled"],
+					"displayName": "Status"
+				}
+			]
+		},
+		{
+			"actionId": "get_workspace_settings",
+			"resource": "workspace",
+			"operation": "getSettings",
+			"name": "Get Settings",
+			"description": "Read this workspace's identity: name, slug, branding and onboarding state. Payment terms are set per application and environment, not here.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["merchant:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/merchants/me"
+				}
+			],
+			"paginated": false,
+			"fields": []
+		},
+		{
+			"actionId": "get_audit_log",
+			"resource": "workspace",
+			"operation": "getAuditLog",
+			"name": "Get Audit Log",
+			"description": "Recent admin actions taken on this workspace — invites, billing changes, key rotation, suspensions.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["audit_logs:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/audit-log"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "limit",
+					"type": "number",
+					"required": false,
+					"description": "Maximum entries (1-200).",
+					"default": 100,
+					"displayName": "Limit"
+				}
+			]
+		},
+		{
+			"actionId": "list_applications",
+			"resource": "workspace",
+			"operation": "getApplications",
+			"name": "Get Applications",
+			"description": "List every application in this workspace you have access to, so you can pass one of their ids as applicationId on other read and analytics tools. Note: the underlying route is the legacy-named /v1/stores (kept for contract stability) — the resource it returns is applications, not a separate \"stores\" concept.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["applications:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/stores"
+				}
+			],
+			"paginated": false,
+			"fields": []
+		},
+		{
+			"actionId": "get_sales_timeseries",
+			"resource": "analytics",
+			"operation": "getSalesTimeseries",
+			"name": "Get Sales Timeseries",
+			"description": "Order count and gross revenue bucketed by day, week or month over any date range, in the merchant's timezone, optionally compared to the previous period or the same range last year. Use this for \"how much did we sell on/last/between…\" instead of paging search_orders and adding it up.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net."
+			],
+			"scopes": ["orders:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/orders-timeseries"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "groupBy",
+					"type": "string",
+					"required": false,
+					"description": "Bucket size.",
+					"enum": ["day", "week", "month"],
+					"default": "day",
+					"displayName": "Group By"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for bucket boundaries, e.g. America/New_York. Defaults to UTC — ask the user rather than assuming UTC when the answer depends on day boundaries.",
+					"displayName": "Timezone"
+				},
+				{
+					"name": "compareTo",
+					"type": "string",
+					"required": false,
+					"description": "Add a comparison total.",
+					"enum": ["previous_period", "previous_year", "none"],
+					"default": "none",
+					"displayName": "Compare To"
+				}
+			]
+		},
+		{
+			"actionId": "get_business_summary",
+			"resource": "analytics",
+			"operation": "getBusinessSummary",
+			"name": "Get Business Summary",
+			"description": "How are we doing? Orders/revenue, subscription MRR, receivables and quotes pipeline over a date range, compared to the immediately preceding window of equal length. Note: period=week|month|quarter means the TRAILING 7/30/90 days, not a calendar period — pass from/to for calendar months.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Each section needs its own scope (orders:read, subscriptions:read, invoices:read, quotes:read). A section without its scope is reported as omitted rather than failing the whole call."
+			],
+			"scopes": [],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/business-summary"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "period",
+					"type": "string",
+					"required": false,
+					"description": "Reporting window.",
+					"enum": ["week", "month", "quarter"],
+					"default": "month",
+					"displayName": "Period"
+				},
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range. Overrides period.",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for period boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				}
+			]
+		},
+		{
+			"actionId": "get_top_products",
+			"resource": "analytics",
+			"operation": "getTopProducts",
+			"name": "Get Top Products",
+			"description": "Best-selling products over a date range, by revenue or units sold. Line items come from the merchant's own cart payload, so a product is identified by its external reference id when present and by name otherwise. The response carries both the top-N rows (by the chosen sort) and range-wide totals across every matching product, so you can compute what share of total revenue/units the top N represent.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net."
+			],
+			"scopes": ["orders:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/products"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for range boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				},
+				{
+					"name": "by",
+					"type": "string",
+					"required": false,
+					"description": "Sort key.",
+					"enum": ["revenue", "units"],
+					"default": "revenue",
+					"displayName": "By"
+				},
+				{
+					"name": "limit",
+					"type": "number",
+					"required": false,
+					"description": "Max rows to return (1-100). Defaults to 20.",
+					"displayName": "Limit"
+				}
+			]
+		},
+		{
+			"actionId": "get_attention_digest",
+			"resource": "analytics",
+			"operation": "getAttentionDigest",
+			"name": "Get Attention Digest",
+			"description": "What needs attention right now? Open disputes, subscriptions in dunning, overdue Net-N invoices, and webhooks with degraded delivery health — a point-in-time snapshot, not a time range.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Each section needs its own scope (payment_disputes:read, subscriptions:read, invoices:read, webhook_deliveries:read). A section without its scope is reported as omitted rather than failing the whole call."
+			],
+			"scopes": [],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/attention-digest"
+				}
+			],
+			"paginated": false,
+			"fields": []
+		},
+		{
+			"actionId": "get_customer_growth",
+			"resource": "analytics",
+			"operation": "getCustomerGrowth",
+			"name": "Get Customer Growth",
+			"description": "Customer growth over a date range: signups per day/week/month, how many orders came from first-time versus returning customers, and the highest-value customers in the window.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net.",
+				"topCustomers is a top-N list; use the accompanying totals for range-wide customer/order/revenue counts instead of summing the returned rows.",
+				"topCustomers[].email and .name come back null unless the credential holds customer_pii:read, which OAuth connections cannot hold. Identify a top customer by id, not by a null name."
+			],
+			"scopes": ["customers:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/customers"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "groupBy",
+					"type": "string",
+					"required": false,
+					"description": "Signup series bucket size.",
+					"enum": ["day", "week", "month"],
+					"default": "day",
+					"displayName": "Group By"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for bucket boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				},
+				{
+					"name": "topBy",
+					"type": "string",
+					"required": false,
+					"description": "Sort key for top customers.",
+					"enum": ["revenue", "orders"],
+					"default": "revenue",
+					"displayName": "Top By"
+				},
+				{
+					"name": "topLimit",
+					"type": "number",
+					"required": false,
+					"description": "Max top-customers rows to return (1-50). Defaults to 10.",
+					"displayName": "Top Limit"
+				}
+			]
+		},
+		{
+			"actionId": "get_revenue_breakdown",
+			"resource": "analytics",
+			"operation": "getRevenueBreakdown",
+			"name": "Get Revenue Breakdown",
+			"description": "Revenue split by one dimension over a date range — payment method, order source, or currency. Amounts are gross; refunds are not deducted.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net.",
+				"dimension is required; it is never defaulted, so omitting it fails the call instead of silently picking a dimension.",
+				"For dimension=paymentMethod, an order paid via more than one method can appear in more than one row, so rows can sum to more than totals (a separate whole-range aggregate over orders alone)."
+			],
+			"scopes": ["orders:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/revenue-breakdown"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "dimension",
+					"type": "string",
+					"required": true,
+					"description": "Breakdown dimension.",
+					"enum": ["paymentMethod", "source", "currency"],
+					"displayName": "Dimension"
+				},
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for range boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				}
+			]
+		},
+		{
+			"actionId": "get_funnel_conversion",
+			"resource": "analytics",
+			"operation": "getFunnelConversion",
+			"name": "Get Funnel Conversion",
+			"description": "Checkout funnel over a date range: carts created, checkout sessions started, orders completed, with the drop-off between each stage.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"Each stage needs its own scope (carts:read, checkout_sessions:read, orders:read), checked independently — an OAuth grant carries literal scopes with no legacy expansion, so a credential can hold carts:read without the other two. An omitted stage is reported as such rather than failing the whole call.",
+				"conversionRate and dropOff[].ratePct are null (unknown) when a stage they depend on is omitted, and 0 only when the stage was readable with a true zero count. Never treat a null here as 0.",
+				"dropOff[].ratePct is the percentage of \"from\" that did NOT reach \"to\" (loss), not a conversion rate. The step-conversion rate is 100 - ratePct."
+			],
+			"scopes": ["carts:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/funnel"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for range boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				}
+			]
+		},
+		{
+			"actionId": "get_subscription_movement",
+			"resource": "analytics",
+			"operation": "getSubscriptionMovement",
+			"name": "Get Subscription Movement",
+			"description": "Subscription movement over a date range: new subscriptions, cancellations and net MRR change per day/week/month. Figures are reconstructed from subscription timestamps, not a stored historical snapshot.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"newSubscriptions, churnedSubscriptions and mrrDeltaCents are reconstructed per bucket from subscription created_at/cancelled_at timestamps, not a stored historical MRR snapshot — never present this series as an audited historical MRR ledger.",
+				"mrrDeltaCents for a bucket only credits subscriptions created in that bucket that are still active right now, and only debits subscriptions cancelled in that bucket that already existed when it started. A subscription created AND cancelled inside the same bucket still counts toward both newSubscriptions and churnedSubscriptions but contributes 0 to mrrDeltaCents.",
+				"totals is the sum over the full series (the series is never truncated), so totals.newSubscriptions/.churnedSubscriptions/.netMrrDeltaCents always equal the corresponding sums of series[]."
+			],
+			"scopes": ["subscriptions:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/subscriptions"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for bucket boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				},
+				{
+					"name": "groupBy",
+					"type": "string",
+					"required": false,
+					"description": "Bucket size.",
+					"enum": ["day", "week", "month"],
+					"default": "day",
+					"displayName": "Group By"
+				}
+			]
+		},
+		{
+			"actionId": "get_discount_performance",
+			"resource": "analytics",
+			"operation": "getDiscountPerformance",
+			"name": "Get Discount Performance",
+			"description": "Discount code performance over a date range: redemption count, revenue on discounted orders, and total discount given per code.",
+			"kind": "read",
+			"destructive": false,
+			"guardrails": [
+				"discountedRevenueCents and discountGivenCents are DIFFERENT measures: discountedRevenueCents is the gross order total on orders that redeemed the code; discountGivenCents is the discount amount taken off those same orders. Never describe discountedRevenueCents as \"given away\" or discountGivenCents as revenue.",
+				"Only orders with status <> draft and a gross-eligible payment_status are counted; refunds are not deducted from discountedRevenueCents, because that needs payment_refunds:read.",
+				"rows are the top N codes by discount given; totals is a SEPARATE whole-range aggregate (not a reduction over rows), so totals.redemptions / totals.discountGivenCents stay valid even when rows is truncated by limit."
+			],
+			"scopes": ["discounts:read"],
+			"requests": [
+				{
+					"method": "GET",
+					"path": "/api/v1/analytics/discounts"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "from",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 start of range, exclusive. Defaults to 30 days before \"to\".",
+					"displayName": "From"
+				},
+				{
+					"name": "to",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 end of range, exclusive. Defaults to now.",
+					"displayName": "To"
+				},
+				{
+					"name": "timezone",
+					"type": "string",
+					"required": false,
+					"description": "IANA timezone for range boundaries. Defaults to UTC.",
+					"displayName": "Timezone"
+				},
+				{
+					"name": "limit",
+					"type": "number",
+					"required": false,
+					"description": "Max rows to return. Defaults to 20.",
+					"displayName": "Limit"
+				}
+			]
+		},
+		{
+			"actionId": "create_customer",
+			"resource": "customer",
+			"operation": "create",
+			"name": "Create",
+			"description": "Create a customer record. Use search_customers first if the buyer may already exist — this does not de-duplicate by email.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [
+				"The created record is echoed back with email, phone, firstName, lastName and name nulled unless the credential holds customer_pii:read, which OAuth connections cannot hold — the customer is still created with the values sent, only the response is redacted."
+			],
+			"scopes": ["customers:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/customers"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "email",
+					"type": "string",
+					"required": true,
+					"description": "The buyer's email address.",
+					"displayName": "Email"
+				},
+				{
+					"name": "firstName",
+					"type": "string",
+					"required": false,
+					"description": "Given name.",
+					"displayName": "First Name"
+				},
+				{
+					"name": "lastName",
+					"type": "string",
+					"required": false,
+					"description": "Family name.",
+					"displayName": "Last Name"
+				},
+				{
+					"name": "phone",
+					"type": "string",
+					"required": false,
+					"description": "Contact phone number.",
+					"displayName": "Phone"
+				},
+				{
+					"name": "company",
+					"type": "string",
+					"required": false,
+					"description": "The buyer's company.",
+					"displayName": "Company"
+				},
+				{
+					"name": "externalId",
+					"type": "string",
+					"required": false,
+					"description": "This customer's id in your own system. Resolvable later via get_customer.",
+					"displayName": "External ID"
+				},
+				{
+					"name": "netN",
+					"type": "number",
+					"required": false,
+					"description": "Invoice terms in days for this customer specifically, 0-365. Omit to use the workspace default; 0 means due on issue.",
+					"displayName": "Net Terms (Days)"
+				},
+				{
+					"name": "acceptsMarketing",
+					"type": "boolean",
+					"required": false,
+					"description": "Whether the buyer opted into marketing email.",
+					"default": false,
+					"displayName": "Accepts Marketing"
+				}
+			]
+		},
+		{
+			"actionId": "update_customer",
+			"resource": "customer",
+			"operation": "update",
+			"name": "Update",
+			"description": "Change fields on an existing customer. Only the fields supplied are touched; everything else is left alone.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [
+				"The updated record is echoed back with email, phone, firstName, lastName and name nulled unless the credential holds customer_pii:read, which OAuth connections cannot hold — the update still applied, only the response is redacted."
+			],
+			"scopes": ["customers:write"],
+			"requests": [
+				{
+					"method": "PATCH",
+					"path": "/api/v1/customers/:id"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Customer id.",
+					"displayName": "Customer ID"
+				},
+				{
+					"name": "email",
+					"type": "string",
+					"required": false,
+					"description": "The buyer's email address.",
+					"displayName": "Email"
+				},
+				{
+					"name": "firstName",
+					"type": "string",
+					"required": false,
+					"description": "Given name.",
+					"displayName": "First Name"
+				},
+				{
+					"name": "lastName",
+					"type": "string",
+					"required": false,
+					"description": "Family name.",
+					"displayName": "Last Name"
+				},
+				{
+					"name": "phone",
+					"type": "string",
+					"required": false,
+					"description": "Contact phone number.",
+					"displayName": "Phone"
+				},
+				{
+					"name": "company",
+					"type": "string",
+					"required": false,
+					"description": "The buyer's company.",
+					"displayName": "Company"
+				},
+				{
+					"name": "externalId",
+					"type": "string",
+					"required": false,
+					"description": "This customer's id in your own system. Pass null to clear it.",
+					"displayName": "External ID"
+				},
+				{
+					"name": "netN",
+					"type": "number",
+					"required": false,
+					"description": "Invoice terms in days for this customer specifically, 0-365.",
+					"displayName": "Net Terms (Days)"
+				},
+				{
+					"name": "acceptsMarketing",
+					"type": "boolean",
+					"required": false,
+					"description": "Whether the buyer opted into marketing email.",
+					"displayName": "Accepts Marketing"
+				}
+			]
+		},
+		{
+			"actionId": "create_checkout_link",
+			"resource": "checkout",
+			"operation": "createLink",
+			"name": "Create Link",
+			"description": "Build a cart from line items and return a hosted checkout URL the buyer can pay at. Prices are in minor units (2500 = $25.00).",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [
+				"The returned URL is buyer-facing and takes real payment in a production environment."
+			],
+			"scopes": ["carts:write", "cart_items:write", "checkout_sessions:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/carts"
+				},
+				{
+					"method": "POST",
+					"path": "/api/v1/carts/:id/items"
+				},
+				{
+					"method": "POST",
+					"path": "/api/v1/checkout/sessions"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "lineItems",
+					"type": "array",
+					"required": true,
+					"description": "What the buyer is paying for: { name, unitPrice, quantity }. unitPrice is an integer in minor units.",
+					"displayName": "Line Items"
+				},
+				{
+					"name": "returnUrl",
+					"type": "string",
+					"required": true,
+					"description": "Absolute URL the buyer lands on after paying.",
+					"displayName": "Return URL"
+				},
+				{
+					"name": "cancelUrl",
+					"type": "string",
+					"required": true,
+					"description": "Absolute URL the buyer lands on if they abandon checkout.",
+					"displayName": "Cancel URL"
+				},
+				{
+					"name": "customerId",
+					"type": "string",
+					"required": false,
+					"description": "Attach the cart to an existing customer.",
+					"displayName": "Customer ID"
+				},
+				{
+					"name": "customerEmail",
+					"type": "string",
+					"required": false,
+					"description": "Pre-fill the buyer email without needing a customer record.",
+					"displayName": "Customer Email"
+				},
+				{
+					"name": "discountCode",
+					"type": "string",
+					"required": false,
+					"description": "Discount code to apply to the session.",
+					"displayName": "Discount Code"
+				},
+				{
+					"name": "netN",
+					"type": "number",
+					"required": false,
+					"description": "Invoice terms in days for this cart, 0-365. Omit to pay in full at checkout.",
+					"displayName": "Net Terms (Days)"
+				}
+			]
+		},
+		{
+			"actionId": "create_quote",
+			"resource": "quote",
+			"operation": "create",
+			"name": "Create",
+			"description": "Draft a quote for a customer with line items and terms. Does not send it — use send_quote.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [
+				"A quote with a recurring item must be pay-in-full: issuing it with net terms or a deposit fails with 422 recurring_terms_unsupported."
+			],
+			"scopes": ["quotes:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/quotes"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "customerId",
+					"type": "string",
+					"required": true,
+					"description": "Customer the quote is for.",
+					"displayName": "Customer ID"
+				},
+				{
+					"name": "items",
+					"type": "array",
+					"required": true,
+					"description": "Quote line items: { name, unitPrice, quantity }. Add `recurring: { plan, interval | intervalUnit + intervalCount, totalPayments?, trialDays? }` to make a line a subscription (one per line when the quote is paid, quantity = seats; at most 10). unitPrice is then the per-period price; a free-trial line is charged nothing at acceptance.",
+					"displayName": "Items"
+				},
+				{
+					"name": "expiresAt",
+					"type": "string",
+					"required": false,
+					"description": "ISO 8601 expiry.",
+					"displayName": "Expires At"
+				},
+				{
+					"name": "netN",
+					"type": "number",
+					"required": false,
+					"description": "Payment terms in days. Omit for pay-in-full. Not allowed when any item is recurring.",
+					"displayName": "Net Terms (Days)"
+				},
+				{
+					"name": "notes",
+					"type": "string",
+					"required": false,
+					"description": "Buyer-visible notes.",
+					"displayName": "Notes"
+				}
+			]
+		},
+		{
+			"actionId": "send_quote",
+			"resource": "quote",
+			"operation": "send",
+			"name": "Send",
+			"description": "Issue a draft quote and email the buyer their quote link. This is buyer-visible — confirm with the user before calling it.",
+			"kind": "write",
+			"destructive": true,
+			"guardrails": [
+				"Sends mail to a real buyer. Never call it speculatively or to \"check\" a quote."
+			],
+			"scopes": ["quotes:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/quotes/:id/issue"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Quote id.",
+					"displayName": "Quote ID"
+				}
+			]
+		},
+		{
+			"actionId": "refund_payment",
+			"resource": "payment",
+			"operation": "refund",
+			"name": "Refund",
+			"description": "Refund a captured payment. The amount is required — never infer a full refund from an unspecified amount.",
+			"kind": "write",
+			"destructive": true,
+			"guardrails": [
+				"Moves money and is irreversible. Confirm with the user first.",
+				"The API treats an omitted amount as a FULL refund, so this action requires it explicitly."
+			],
+			"scopes": ["payment_refunds:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/payments/:id/refund"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Payment id.",
+					"displayName": "Payment ID"
+				},
+				{
+					"name": "amount",
+					"type": "number",
+					"required": true,
+					"description": "Amount to refund in minor units. Required — omitting it would refund the whole payment.",
+					"displayName": "Amount"
+				},
+				{
+					"name": "reason",
+					"type": "string",
+					"required": false,
+					"description": "Reason recorded on the refund.",
+					"displayName": "Reason"
+				}
+			]
+		},
+		{
+			"actionId": "manage_subscription",
+			"resource": "subscription",
+			"operation": "pause",
+			"name": "Pause",
+			"description": "Pause or resume an active subscription.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["subscription_pauses:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/subscriptions/:id/pause"
+				},
+				{
+					"method": "POST",
+					"path": "/api/v1/subscriptions/:id/resume"
+				}
+			],
+			"paginated": false,
+			"fixed": {
+				"action": "pause"
+			},
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Subscription id.",
+					"displayName": "Subscription ID"
+				}
+			]
+		},
+		{
+			"actionId": "manage_subscription",
+			"resource": "subscription",
+			"operation": "resume",
+			"name": "Resume",
+			"description": "Pause or resume an active subscription.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [],
+			"scopes": ["subscription_pauses:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/subscriptions/:id/pause"
+				},
+				{
+					"method": "POST",
+					"path": "/api/v1/subscriptions/:id/resume"
+				}
+			],
+			"paginated": false,
+			"fixed": {
+				"action": "resume"
+			},
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Subscription id.",
+					"displayName": "Subscription ID"
+				}
+			]
+		},
+		{
+			"actionId": "set_subscription_payment_method",
+			"resource": "subscription",
+			"operation": "setPaymentMethod",
+			"name": "Set Payment Method",
+			"description": "Set the saved card one subscription renews on. Only that subscription moves; the customer's default card and their other subscriptions stay as they are. Nothing is charged now.",
+			"kind": "write",
+			"destructive": false,
+			"guardrails": [
+				"Changes which card future renewals charge. Confirm the subscription and the card (brand, last four) with the user first.",
+				"409 payment_method_unusable: the card is not this customer's active, in-date saved card. 409 invalid_state: the subscription is cancelled or completed."
+			],
+			"scopes": ["subscriptions:write"],
+			"requests": [
+				{
+					"method": "PATCH",
+					"path": "/api/v1/subscriptions/:id/payment-method"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Subscription id.",
+					"displayName": "Subscription ID"
+				},
+				{
+					"name": "paymentMethodId",
+					"type": "string",
+					"required": true,
+					"description": "One of the subscription customer's saved cards (GET /api/v1/customers/:id/payment-methods): active and in date.",
+					"displayName": "Payment Method ID"
+				}
+			]
+		},
+		{
+			"actionId": "cancel_subscription",
+			"resource": "subscription",
+			"operation": "cancel",
+			"name": "Cancel",
+			"description": "Cancel a subscription. Separate from pause/resume because it needs its own scope.",
+			"kind": "write",
+			"destructive": true,
+			"guardrails": ["Ends billing for a paying customer. Confirm with the user first."],
+			"scopes": ["subscription_cancellations:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/subscriptions/:id/cancel"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Subscription id.",
+					"displayName": "Subscription ID"
+				},
+				{
+					"name": "atPeriodEnd",
+					"type": "boolean",
+					"required": false,
+					"description": "Cancel at the end of the current period instead of immediately.",
+					"displayName": "At Period End"
+				}
+			]
+		},
+		{
+			"actionId": "replay_webhook_delivery",
+			"resource": "webhookDelivery",
+			"operation": "replay",
+			"name": "Replay",
+			"description": "Re-send a past webhook delivery to its endpoint — useful after fixing a broken handler.",
+			"kind": "write",
+			"destructive": true,
+			"guardrails": [
+				"The receiving system will process the event again. Confirm it is idempotent first."
+			],
+			"scopes": ["webhook_deliveries:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/webhook-deliveries/:id/replay"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Delivery id.",
+					"displayName": "Webhook Delivery ID"
+				}
+			]
+		},
+		{
+			"actionId": "send_test_webhook",
+			"resource": "webhookDelivery",
+			"operation": "sendTest",
+			"name": "Send Test",
+			"description": "Send a synthetic signed event to a webhook endpoint to verify signature handling and reachability. The event type must be one the endpoint is subscribed to (an endpoint subscribed to all events accepts any); otherwise the call fails with 400 validation_error naming the allowed types.",
+			"kind": "write",
+			"destructive": true,
+			"guardrails": [],
+			"scopes": ["webhooks:write"],
+			"requests": [
+				{
+					"method": "POST",
+					"path": "/api/v1/webhook-endpoints/:id/test"
+				}
+			],
+			"paginated": false,
+			"fields": [
+				{
+					"name": "id",
+					"type": "string",
+					"required": true,
+					"description": "Endpoint id.",
+					"displayName": "Webhook Endpoint ID"
+				},
+				{
+					"name": "eventType",
+					"type": "string",
+					"required": false,
+					"description": "Event type to simulate. Must be in the endpoint's subscribed events unless it subscribes to all.",
+					"displayName": "Event Type"
+				}
+			]
+		}
+	],
+	"triggers": [
+		{
+			"id": "new_order",
+			"title": "New order",
+			"description": "Fires when an order is created.",
+			"eventType": "order.created",
+			"scope": "orders:read"
+		},
+		{
+			"id": "payment_captured",
+			"title": "Payment captured",
+			"description": "Fires when a payment is successfully captured.",
+			"eventType": "payment.captured",
+			"scope": "payments:read"
+		},
+		{
+			"id": "payment_failed",
+			"title": "Payment failed",
+			"description": "Fires when a payment attempt fails.",
+			"eventType": "payment.failed",
+			"scope": "payments:read"
+		},
+		{
+			"id": "new_subscription",
+			"title": "New subscription",
+			"description": "Fires when a subscription is created.",
+			"eventType": "subscription.created",
+			"scope": "subscriptions:read"
+		},
+		{
+			"id": "subscription_cancelled",
+			"title": "Subscription cancelled",
+			"description": "Fires when a subscription is cancelled.",
+			"eventType": "subscription.cancelled",
+			"scope": "subscriptions:read"
+		},
+		{
+			"id": "quote_accepted",
+			"title": "Quote accepted",
+			"description": "Fires when a buyer accepts a quote.",
+			"eventType": "quote.accepted",
+			"scope": "quotes:read"
+		},
+		{
+			"id": "cart_abandoned",
+			"title": "Cart abandoned",
+			"description": "Fires when a cart is marked abandoned.",
+			"eventType": "cart.abandoned",
+			"scope": "carts:read"
+		},
+		{
+			"id": "invoice_past_due",
+			"title": "Invoice past due",
+			"description": "Fires when an invoice passes its due date unpaid.",
+			"eventType": "invoice.past_due",
+			"scope": "invoices:read"
+		}
+	]
+}

@@ -1,0 +1,18 @@
+{
+	"node": "@usethrottle/n8n-nodes-throttle.throttleTrigger",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Sales", "Finance & Accounting"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://usethrottle.dev/docs/developers/n8n#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://usethrottle.dev/docs/developers/n8n"
+			}
+		]
+	}
+}

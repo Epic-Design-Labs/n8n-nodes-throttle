@@ -1,0 +1,64 @@
+{
+  "name": "@usethrottle/n8n-nodes-throttle",
+  "version": "0.1.0",
+  "description": "n8n nodes for Throttle: read and act on orders, customers, subscriptions, quotes and payments, and start workflows from Throttle events.",
+  "license": "MIT",
+  "homepage": "https://usethrottle.dev/docs/developers/n8n",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "throttle",
+    "commerce",
+    "checkout",
+    "subscriptions"
+  ],
+  "author": {
+    "name": "kalwiggins",
+    "email": "kalonw@epicdesignlabs.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Epic-Design-Labs/n8n-nodes-throttle.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease",
+    "generate": "node scripts/generate-catalog.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/ThrottleApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Throttle/Throttle.node.js",
+      "dist/nodes/ThrottleTrigger/ThrottleTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^21.1.0",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
