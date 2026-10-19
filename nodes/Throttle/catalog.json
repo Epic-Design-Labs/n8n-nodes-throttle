@@ -90,7 +90,9 @@
 				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing.",
 				"Over an OAuth connection, q matches the order id, order number and status fields only."
 			],
-			"scopes": ["orders:read"],
+			"scopes": [
+				"orders:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -147,7 +149,9 @@
 			"guardrails": [
 				"email, phone, firstName, lastName, name and metadata are withheld (null, or absent from the result) unless the credential holds customer_pii:read, which OAuth connections cannot hold. Over an OAuth connection company, externalId and externalCustomerId are withheld too, and q is refused. Do not describe a missing name/email as \"no name on file\"; say it is withheld."
 			],
-			"scopes": ["customers:read"],
+			"scopes": [
+				"customers:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -188,7 +192,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["subscriptions:read"],
+			"scopes": [
+				"subscriptions:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -236,7 +242,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["subscriptions:read"],
+			"scopes": [
+				"subscriptions:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -263,7 +271,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["quotes:read"],
+			"scopes": [
+				"quotes:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -306,7 +316,9 @@
 			"guardrails": [
 				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
 			],
-			"scopes": ["quotes:read"],
+			"scopes": [
+				"quotes:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -335,7 +347,9 @@
 			"guardrails": [
 				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
 			],
-			"scopes": ["invoices:read"],
+			"scopes": [
+				"invoices:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -362,7 +376,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["invoices:read"],
+			"scopes": [
+				"invoices:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -381,7 +397,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["discounts:read"],
+			"scopes": [
+				"discounts:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -409,7 +427,10 @@
 					"type": "string",
 					"required": false,
 					"description": "Filter by discount type.",
-					"enum": ["percentage", "fixed_amount"],
+					"enum": [
+						"percentage",
+						"fixed_amount"
+					],
 					"displayName": "Type"
 				},
 				{
@@ -444,7 +465,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["discounts:read"],
+			"scopes": [
+				"discounts:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -471,7 +494,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["payments:read"],
+			"scopes": [
+				"payments:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -506,7 +531,12 @@
 					"type": "string",
 					"required": false,
 					"description": "Overdue bucket filter, Net-N payments only.",
-					"enum": ["0_30", "31_60", "61_90", "90_plus"],
+					"enum": [
+						"0_30",
+						"31_60",
+						"61_90",
+						"90_plus"
+					],
 					"displayName": "Aging"
 				},
 				{
@@ -550,7 +580,9 @@
 			"guardrails": [
 				"Over an OAuth connection (ChatGPT, Claude) these are withheld, because a buyer can type them: line-item and quote-item names, SKUs and reference ids; company; every address line except the country; the merchant's external ids; notes, messages, reasons and metadata. Describe items by quantity and amount, and say the rest is withheld rather than missing."
 			],
-			"scopes": ["invoices:read"],
+			"scopes": [
+				"invoices:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -579,7 +611,9 @@
 			"guardrails": [
 				"Report the summary as unavailable rather than failing the whole call if that sub-read errors."
 			],
-			"scopes": ["carts:read"],
+			"scopes": [
+				"carts:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -602,7 +636,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["events:read"],
+			"scopes": [
+				"events:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -643,7 +679,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["webhook_deliveries:read"],
+			"scopes": [
+				"webhook_deliveries:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -691,7 +729,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["webhook_deliveries:read"],
+			"scopes": [
+				"webhook_deliveries:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -718,7 +758,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["extensions:read"],
+			"scopes": [
+				"extensions:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -732,7 +774,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Filter by installation status.",
-					"enum": ["active", "suspended", "uninstalled"],
+					"enum": [
+						"active",
+						"suspended",
+						"uninstalled"
+					],
 					"displayName": "Status"
 				}
 			]
@@ -746,7 +792,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["merchant:read"],
+			"scopes": [
+				"merchant:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -765,7 +813,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["audit_logs:read"],
+			"scopes": [
+				"audit_logs:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -793,7 +843,9 @@
 			"kind": "read",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["applications:read"],
+			"scopes": [
+				"applications:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -814,7 +866,9 @@
 			"guardrails": [
 				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net."
 			],
-			"scopes": ["orders:read"],
+			"scopes": [
+				"orders:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -842,7 +896,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Bucket size.",
-					"enum": ["day", "week", "month"],
+					"enum": [
+						"day",
+						"week",
+						"month"
+					],
 					"default": "day",
 					"displayName": "Group By"
 				},
@@ -858,7 +916,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Add a comparison total.",
-					"enum": ["previous_period", "previous_year", "none"],
+					"enum": [
+						"previous_period",
+						"previous_year",
+						"none"
+					],
 					"default": "none",
 					"displayName": "Compare To"
 				}
@@ -889,7 +951,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Reporting window.",
-					"enum": ["week", "month", "quarter"],
+					"enum": [
+						"week",
+						"month",
+						"quarter"
+					],
 					"default": "month",
 					"displayName": "Period"
 				},
@@ -927,7 +993,9 @@
 			"guardrails": [
 				"Revenue is GROSS. Refunds are not deducted, because that needs payment_refunds:read, which OAuth connections cannot hold. Never describe the figure as net."
 			],
-			"scopes": ["orders:read"],
+			"scopes": [
+				"orders:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -962,7 +1030,10 @@
 					"type": "string",
 					"required": false,
 					"description": "Sort key.",
-					"enum": ["revenue", "units"],
+					"enum": [
+						"revenue",
+						"units"
+					],
 					"default": "revenue",
 					"displayName": "By"
 				},
@@ -1009,7 +1080,9 @@
 				"topCustomers is a top-N list; use the accompanying totals for range-wide customer/order/revenue counts instead of summing the returned rows.",
 				"topCustomers[].email and .name come back null unless the credential holds customer_pii:read, which OAuth connections cannot hold. Identify a top customer by id, not by a null name."
 			],
-			"scopes": ["customers:read"],
+			"scopes": [
+				"customers:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -1037,7 +1110,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Signup series bucket size.",
-					"enum": ["day", "week", "month"],
+					"enum": [
+						"day",
+						"week",
+						"month"
+					],
 					"default": "day",
 					"displayName": "Group By"
 				},
@@ -1053,7 +1130,10 @@
 					"type": "string",
 					"required": false,
 					"description": "Sort key for top customers.",
-					"enum": ["revenue", "orders"],
+					"enum": [
+						"revenue",
+						"orders"
+					],
 					"default": "revenue",
 					"displayName": "Top By"
 				},
@@ -1079,7 +1159,9 @@
 				"dimension is required; it is never defaulted, so omitting it fails the call instead of silently picking a dimension.",
 				"For dimension=paymentMethod, an order paid via more than one method can appear in more than one row, so rows can sum to more than totals (a separate whole-range aggregate over orders alone)."
 			],
-			"scopes": ["orders:read"],
+			"scopes": [
+				"orders:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -1093,7 +1175,11 @@
 					"type": "string",
 					"required": true,
 					"description": "Breakdown dimension.",
-					"enum": ["paymentMethod", "source", "currency"],
+					"enum": [
+						"paymentMethod",
+						"source",
+						"currency"
+					],
 					"displayName": "Dimension"
 				},
 				{
@@ -1132,7 +1218,9 @@
 				"conversionRate and dropOff[].ratePct are null (unknown) when a stage they depend on is omitted, and 0 only when the stage was readable with a true zero count. Never treat a null here as 0.",
 				"dropOff[].ratePct is the percentage of \"from\" that did NOT reach \"to\" (loss), not a conversion rate. The step-conversion rate is 100 - ratePct."
 			],
-			"scopes": ["carts:read"],
+			"scopes": [
+				"carts:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -1177,7 +1265,9 @@
 				"mrrDeltaCents for a bucket only credits subscriptions created in that bucket that are still active right now, and only debits subscriptions cancelled in that bucket that already existed when it started. A subscription created AND cancelled inside the same bucket still counts toward both newSubscriptions and churnedSubscriptions but contributes 0 to mrrDeltaCents.",
 				"totals is the sum over the full series (the series is never truncated), so totals.newSubscriptions/.churnedSubscriptions/.netMrrDeltaCents always equal the corresponding sums of series[]."
 			],
-			"scopes": ["subscriptions:read"],
+			"scopes": [
+				"subscriptions:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -1212,7 +1302,11 @@
 					"type": "string",
 					"required": false,
 					"description": "Bucket size.",
-					"enum": ["day", "week", "month"],
+					"enum": [
+						"day",
+						"week",
+						"month"
+					],
 					"default": "day",
 					"displayName": "Group By"
 				}
@@ -1231,7 +1325,9 @@
 				"Only orders with status <> draft and a gross-eligible payment_status are counted; refunds are not deducted from discountedRevenueCents, because that needs payment_refunds:read.",
 				"rows are the top N codes by discount given; totals is a SEPARATE whole-range aggregate (not a reduction over rows), so totals.redemptions / totals.discountGivenCents stay valid even when rows is truncated by limit."
 			],
-			"scopes": ["discounts:read"],
+			"scopes": [
+				"discounts:read"
+			],
 			"requests": [
 				{
 					"method": "GET",
@@ -1275,13 +1371,15 @@
 			"resource": "customer",
 			"operation": "create",
 			"name": "Create",
-			"description": "Create a customer record. Use search_customers first if the buyer may already exist — this does not de-duplicate by email.",
+			"description": "Create a customer record. Email and externalId are each unique per application: a value that already belongs to a customer fails with 409 customer_already_exists rather than returning the existing record, so use search_customers first if the buyer may already exist.",
 			"kind": "write",
 			"destructive": false,
 			"guardrails": [
 				"The created record is echoed back with email, phone, firstName, lastName and name nulled unless the credential holds customer_pii:read, which OAuth connections cannot hold — the customer is still created with the values sent, only the response is redacted."
 			],
-			"scopes": ["customers:write"],
+			"scopes": [
+				"customers:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1360,7 +1458,9 @@
 			"guardrails": [
 				"The updated record is echoed back with email, phone, firstName, lastName and name nulled unless the credential holds customer_pii:read, which OAuth connections cannot hold — the update still applied, only the response is redacted."
 			],
-			"scopes": ["customers:write"],
+			"scopes": [
+				"customers:write"
+			],
 			"requests": [
 				{
 					"method": "PATCH",
@@ -1445,7 +1545,11 @@
 			"guardrails": [
 				"The returned URL is buyer-facing and takes real payment in a production environment."
 			],
-			"scopes": ["carts:write", "cart_items:write", "checkout_sessions:write"],
+			"scopes": [
+				"carts:write",
+				"cart_items:write",
+				"checkout_sessions:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1524,7 +1628,9 @@
 			"guardrails": [
 				"A quote with a recurring item must be pay-in-full: issuing it with net terms or a deposit fails with 422 recurring_terms_unsupported."
 			],
-			"scopes": ["quotes:write"],
+			"scopes": [
+				"quotes:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1581,7 +1687,9 @@
 			"guardrails": [
 				"Sends mail to a real buyer. Never call it speculatively or to \"check\" a quote."
 			],
-			"scopes": ["quotes:write"],
+			"scopes": [
+				"quotes:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1611,7 +1719,9 @@
 				"Moves money and is irreversible. Confirm with the user first.",
 				"The API treats an omitted amount as a FULL refund, so this action requires it explicitly."
 			],
-			"scopes": ["payment_refunds:write"],
+			"scopes": [
+				"payment_refunds:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1652,7 +1762,9 @@
 			"kind": "write",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["subscription_pauses:write"],
+			"scopes": [
+				"subscription_pauses:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1686,7 +1798,9 @@
 			"kind": "write",
 			"destructive": false,
 			"guardrails": [],
-			"scopes": ["subscription_pauses:write"],
+			"scopes": [
+				"subscription_pauses:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1723,7 +1837,9 @@
 				"Changes which card future renewals charge. Confirm the subscription and the card (brand, last four) with the user first.",
 				"409 payment_method_unusable: the card is not this customer's active, in-date saved card. 409 invalid_state: the subscription is cancelled or completed."
 			],
-			"scopes": ["subscriptions:write"],
+			"scopes": [
+				"subscriptions:write"
+			],
 			"requests": [
 				{
 					"method": "PATCH",
@@ -1756,8 +1872,12 @@
 			"description": "Cancel a subscription. Separate from pause/resume because it needs its own scope.",
 			"kind": "write",
 			"destructive": true,
-			"guardrails": ["Ends billing for a paying customer. Confirm with the user first."],
-			"scopes": ["subscription_cancellations:write"],
+			"guardrails": [
+				"Ends billing for a paying customer. Confirm with the user first."
+			],
+			"scopes": [
+				"subscription_cancellations:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1793,7 +1913,9 @@
 			"guardrails": [
 				"The receiving system will process the event again. Confirm it is idempotent first."
 			],
-			"scopes": ["webhook_deliveries:write"],
+			"scopes": [
+				"webhook_deliveries:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
@@ -1820,7 +1942,9 @@
 			"kind": "write",
 			"destructive": true,
 			"guardrails": [],
-			"scopes": ["webhooks:write"],
+			"scopes": [
+				"webhooks:write"
+			],
 			"requests": [
 				{
 					"method": "POST",
